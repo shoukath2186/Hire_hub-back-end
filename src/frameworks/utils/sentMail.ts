@@ -10,7 +10,7 @@ class sendOtp implements Nodemailer {
     this._transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "hirehubjobs724@gmail.com",
+        user: "shoukathot77@gmail.com",
         pass: process.env.MAILER,
       },
     });
@@ -18,7 +18,7 @@ class sendOtp implements Nodemailer {
 
   sendMail(email: string, otp: number): void {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: "hirehubjobs724@gmail.com",
+      from: "shoukathot77@gmail.com",
       to: email,
       subject: "HireHub email verification",
       html: `

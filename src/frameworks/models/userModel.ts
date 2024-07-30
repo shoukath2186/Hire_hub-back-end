@@ -2,12 +2,17 @@ import mongoose, { Model, Schema, Document } from "mongoose";
 import User from "../../entities/user";
 
 const userSchema: Schema<User & Document> = new Schema({
-  userName: {
+
+  user_name: {
     type: String,
     required: true,
   },
-  displayName: {
+  last_name: {
     type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
     required: true,
   },
   email: {
@@ -18,30 +23,25 @@ const userSchema: Schema<User & Document> = new Schema({
     type: String,
     required: true,
   },
-  wallet: {
-    type: Number,
-    default: 0,
+  user_role:{
+     type:String,
+     required:true
   },
-  status: {
-    type: String,
-    default: "Online"
+  otp_verify:{
+    type:Boolean,
+    default:false
   },
   profilePicture: {
     type: String,
+    default:'hello'
   },
   isBlocked: {
     type: Boolean,
     default: false,
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
-  joined_date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }  
+},
+{ timestamps: true }
+);
 
 const UserModel: Model<User & Document> = mongoose.model<User & Document>(
   "User",

@@ -3,7 +3,7 @@ import  express,{ Express }  from "express";
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
 import adminRouter from "../routes/adminRouter";
-
+import userRouter from "../routes/usersRouter";
 
 
 
@@ -11,10 +11,8 @@ const app:Express=express()
 
 
 //parce json bodys
-
 app.use(express.json());
-
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 
 // cookie parser
 
@@ -29,7 +27,9 @@ app.use(
     })
 )
 
-app.use('/admin',adminRouter)
+// Routes
+app.use("/user", userRouter);
+app.use('/admin',adminRouter);
 
 
 export default app;

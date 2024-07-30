@@ -1,9 +1,12 @@
 
 
 import UserRepo from "../usecase/interfaces/users/inUserRepo";
-import UserModel from "../frameworks/models/userModel"; // Assuming Mongoose model
-import User from "../entities/user"; // Assuming this is your User entity
+import UserModel from "../frameworks/models/userModel"; 
+import OtpModel from '../frameworks/models/OTPModel'
+import User from "../entities/user"; 
 
+
+import { ObjectId } from 'mongodb';
 class UserRepository implements UserRepo {
     
   async findByEmail(email: string): Promise<User | null> {
@@ -11,36 +14,65 @@ class UserRepository implements UserRepo {
     return userData ? (userData.toObject() as User) : null;
   }
 
-//   async findUserName(userName: string): Promise<User | null> {
-//     const userData = await UserModel.findOne({ userName: userName });
-//     return userData ? (userData.toObject() as User) : null;
-//   }
+  async saveUser(user: User): Promise<User | null> {
+    
+    const newUser = new UserModel(user);
+    const savedUser = await newUser.save();
+    
+    return savedUser ? (savedUser.toObject() as User) : null;
+  }
 
-//   async saveUser(user: User): Promise<User | null> {
-//     const newUser = new UserModel(user);
-//     const savedUser = await newUser.save();
-//     return savedUser ? (savedUser.toObject() as User) : null;
-//   }
+  async saveOtp(
+    email: string,
+    otp: string,
+  ): Promise<any> {
 
-//   async saveOtp(
-//     email: string,
-//     otp: string,
-//     userName: string,
-//     displayName: string,
-//     password: string
-//   ): Promise<any> {
-//     // Assuming you store OTPs in a separate collection or within the user document
-//     // Adjust as per your schema
-//     const otpData = { email, otp, userName, displayName, password };
-//     const savedOtp = await UserModel.updateOne({ email }, { $set: { otpData } }, { upsert: true });
-//     return savedOtp;
-//   }
+    try {
+     
+      const otpData = new OtpModel({ email, otp });
+      
+      const savedOtp = await otpData.save();
+      
+      return savedOtp;
 
-//   async findOtpByEmail(email: string): Promise<any> {
-//     // Assuming OTPs are stored within the user document or in a separate collection
-//     const user = await UserModel.findOne({ email });
-//     return user?.otpData;
-//   }
+    } catch (error) {
+      console.error('Error saving OTP data:', error);
+      throw error; 
+    }
+  }
+
+  async deleteOtp(id: string | ObjectId) {
+    try {
+      const result = await OtpModel.deleteOne({ _id: id });
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+      
+    }
+   
+        
+  }
+
+  async checkExistOtp(email:string){
+    try {
+      
+      const otpData = await OtpModel.findOne({ email });
+      const userData = await UserModel.findOne({ email });
+       if(!userData){
+        return 'User does not exist.'
+      }
+      if (!otpData) {
+          return 'Email does not exist.';
+      }
+
+      return otpData.otp;
+      
+  } catch (error) {
+      console.error('Error checking OTP:', error);
+      return 'An error occurred while verifying OTP.';
+  }
+
+  }
 
 //   async deleteOtpByEmail(email: string): Promise<any> {
 //     // Assuming OTPs are stored within the user document

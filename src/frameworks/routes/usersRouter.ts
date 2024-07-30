@@ -4,8 +4,6 @@ import UserController from "../../controller/userController";
 import UserUsecase from "../../usecase/userUseCases";
 import UserRepository from '../../repository/userRepository'
 
-
-
 import GenerateOtp from '../utils/generateOtp';
 import EncryptOtp from '../utils/bcryptOtp';
 import EncryptPassword from "../utils/bcryptPassword";
@@ -39,6 +37,28 @@ const userCase = new UserUsecase(
 
   //controllers
 const userController = new UserController(userCase);
+
+
+userRouter.post("/signup", async (req, res, next) => {
+    await setTimeout(()=>{
+      userController.signUp(req, res, next);
+    },2000)
+});
+
+
+userRouter.post("/verify-otp", async (req, res, next) => {
+    
+    userController.verification(req,res, next);
+});
+
+
+userRouter.post("/resendOtp", async (req, res, next) => { 
+
+    
+    userController.resendOtp(req,res, next);
+    
+});
+
 
 
 
