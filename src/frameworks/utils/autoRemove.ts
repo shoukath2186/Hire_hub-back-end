@@ -1,11 +1,11 @@
 
 
-class OutoRemove implements  Repository{
+// class OutoRemove implements  Repository{
     
-    removeOTPById(OtpId:){
+//     removeOTPById(OtpId:string){
 
-    }
-    removeUserById(UserId:){
+//     }
+//     removeUserById(UserId:string){
 
-    }
-}
+//     }
+// }

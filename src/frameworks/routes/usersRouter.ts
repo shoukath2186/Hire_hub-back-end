@@ -10,7 +10,9 @@ import EncryptPassword from "../utils/bcryptPassword";
 import sendOtp from '../utils/sentMail';
 import JWTToken from '../utils/generateToken';
 import errorHandle from "../middlewares/errorHandle";
-
+import StringGenerator from "../utils/stringGenerator"
+import ForgotPasswordLink from '../utils/ForgotPasswordLinkSent'
+import { log } from 'console';
 
 const userRouter = express.Router();
 
@@ -20,7 +22,8 @@ const ecryptPassword = new EncryptPassword();
 const encryptOtp = new EncryptOtp();
 const generateMail = new sendOtp();
 const jwtToken = new JWTToken();
-
+const stringGenerator=new StringGenerator()
+const forgotPasswordLink=new ForgotPasswordLink()
 
 //repositories
 const userRepository = new UserRepository();
@@ -33,6 +36,8 @@ const userCase = new UserUsecase(
     encryptOtp,
     generateMail,
     jwtToken,
+    stringGenerator,
+    forgotPasswordLink
   );
 
   //controllers
@@ -53,13 +58,43 @@ userRouter.post("/verify-otp", async (req, res, next) => {
 
 
 userRouter.post("/resendOtp", async (req, res, next) => { 
-
-    
+ 
     userController.resendOtp(req,res, next);
     
 });
 
+userRouter.post("/login", async (req, res, next) => { 
 
+  userController.login(req,res,next);  
+  
+  
+});
+
+userRouter.post('/forgotPassword',async(req,res,next)=>{
+   
+  userController.forgotPassword(req,res,next);  
+   
+   
+});
+userRouter.post('/reset-password',async(req,res,next)=>{
+   
+  
+   userController.resetPassword(req,res,next);   
+   
+   
+});
+userRouter.post('/logout',async(req,res,next)=>{
+   
+     
+  userController.logout(req,res,next);   
+  
+});
+
+userRouter.post('/loginGoogle',async(req,res,next)=>{
+  
+  userController.googleLogin(req,res,next);
+  
+})
 
 
 

@@ -27,6 +27,10 @@ const userSchema: Schema<User & Document> = new Schema({
      type:String,
      required:true
   },
+  token:{ 
+    type:String,
+    default:''
+  },
   otp_verify:{
     type:Boolean,
     default:false

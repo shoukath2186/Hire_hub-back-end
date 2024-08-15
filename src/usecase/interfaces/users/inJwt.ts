@@ -1,6 +1,7 @@
+import { Token } from "./TokenType";
 interface JWT {
 
-    generateToken(userId: string, role: string): string;
+    accessToken(Token): string;
 }
 
 export default JWT;

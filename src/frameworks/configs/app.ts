@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser'
 import adminRouter from "../routes/adminRouter";
 import userRouter from "../routes/usersRouter";
+import jobRouter from "../routes/JobRouter";
 
 
 
@@ -20,16 +21,30 @@ app.use(cookieParser())
 
 //cors
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5000'
+];
+
 app.use(
-    cors({
-        origin:"http://localhost:5000",
-        credentials:true,
-    })
-)
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // Allow non-origin requests (e.g., from Postman)
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true, // Allow cookies and authentication headers
+  })
+);
+
 
 // Routes
 app.use("/user", userRouter);
 app.use('/admin',adminRouter);
+app.use('/job',jobRouter)
 
 
 export default app;

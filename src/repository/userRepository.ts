@@ -7,6 +7,8 @@ import User from "../entities/user";
 
 
 import { ObjectId } from 'mongodb';
+
+
 class UserRepository implements UserRepo {
     
   async findByEmail(email: string): Promise<User | null> {
@@ -59,7 +61,7 @@ class UserRepository implements UserRepo {
       const otpData = await OtpModel.findOne({ email });
       const userData = await UserModel.findOne({ email });
        if(!userData){
-        return 'User does not exist.'
+        return 'User does not exist.';
       }
       if (!otpData) {
           return 'Email does not exist.';
@@ -74,16 +76,79 @@ class UserRepository implements UserRepo {
 
   }
 
-//   async deleteOtpByEmail(email: string): Promise<any> {
-//     // Assuming OTPs are stored within the user document
-//     const result = await UserModel.updateOne({ email }, { $unset: { otpData: 1 } });
-//     return result;
-//   }
+  async retrieveUserByEmail(email:string){
+      try {
 
-//   async findById(id: string): Promise<User | null> {
-//     const userData = await UserModel.findById(id);
-//     return userData ? (userData.toObject() as User) : null;
-//   }
+        await UserModel.updateOne({email:email},{$set:{otp_verify:true}})
+        
+        const userData=await UserModel.findOne({ email },{user_name:1,last_name:1,_id:1,phone:1,email:1,profilePicture:1,user_role:1});
+        if(!userData){
+          return 'User does not exist.';
+        }
+        return userData
+      } catch (error) {
+        console.error('Error : retrieveUserByEmail', error);
+      }
+  }
+  async alluserData(email:string){
+    try {
+
+      const userData=await UserModel.findOne({ email })
+    if(!userData){
+      return 'User does not exist.';
+    }
+    return userData
+
+    } catch (error) {
+      console.error('Error : retrieveUserByEmail', error);
+    }
+    
+  }
+  async saveTokan(token:string,email:string){ 
+    try {
+      const data= await UserModel.updateOne({email:email},{$set:{token:token}});
+      
+      // console.log(444,data); 
+       
+      if(data.matchedCount==0){
+        return 'User not found. Please register as a new user.'
+      }; 
+      if(data.modifiedCount==1){ 
+        return 'Success'
+      }
+      
+      
+    } catch (error) {
+      console.error('Error : saveToken', error);
+    }
+
+  }
+   
+  async checkingToken(password:string,token:string){
+    
+    const userData=await UserModel.findOne({token:token})
+
+    if(!userData){
+     
+      return'No user found with the provided token. Please check the token or contact support.'
+      
+    }
+    const update=await UserModel.updateOne({token:token},{$set:{token:'',password:password}})
+    
+    if (update.matchedCount === 1) {
+      return 'Password reset successfully.';
+    } else {
+      return 'Password reset failed. Please try again or contact support.';
+    }
+    
+    
+
+  }
+
+  async findDataById(id: string): Promise<User | null> {
+    const userData = await UserModel.findById(id);
+    return userData ? (userData.toObject() as User) : null;
+  }
 
 //   async updateUser(user: User): Promise<User | null> {
 //     const updatedUser = await UserModel.findByIdAndUpdate(user.id, user, { new: true });
