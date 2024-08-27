@@ -7,10 +7,13 @@ export interface IJob extends Document {
     contact: string;
     location: string;
     salary: string;
-    title: string; // Corrected the typo from 'titile' to 'title'
+    is_blocked:boolean,
+    title: string;  
+    description:string,
     job_type: string;
+    category:string;
     skill: string[];
-    logo: string;
+    education:string;
     applications: string[];
     createdAt?: Date;
     updatedAt?: Date;

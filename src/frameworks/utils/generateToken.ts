@@ -16,6 +16,7 @@ class JWTToken implements JWT {
         user_role: userData.user_role,
       };
 
+      
       const token = jwt.sign(payload, SECRETKEY, { 
         expiresIn: '15m'
       });

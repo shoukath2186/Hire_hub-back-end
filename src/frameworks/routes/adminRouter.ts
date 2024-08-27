@@ -10,7 +10,7 @@ import errorHandle from "../middlewares/errorHandle";
 import EncryptPassword from "../utils/bcryptPassword";
 import JWTToken from '../utils/generateToken';
 
-const adminRouter=express.Router()
+const adminRouter=express.Router() 
 
 //services 
 const encryptPassword=new EncryptPassword()
@@ -69,13 +69,27 @@ adminRouter.patch('/categoryBlocking',AdminMiddleware,(req,res,next)=>{
     adminController.blockCategory(req,res,next)
 
 })
-
-
-
 adminRouter.post('/logout',(req,res,next)=>{
 
     adminController.logout(req,res,next);  
     
+})
+adminRouter.patch('/editCategory',AdminMiddleware,(req,res,next)=>{
+
+   adminController.editCategory(req,res,next)
+
+})
+adminRouter.delete('/deleteCategory',AdminMiddleware,(req,res,next)=>{
+    
+     adminController.degeteCategory(req,res,next)
+})
+adminRouter.get('/allJobs',AdminMiddleware,(req,res,next)=>{
+    
+    adminController.takeAlljobs(req,res,next);
+})
+adminRouter.patch('/blockJob',AdminMiddleware,(req,res,next)=>{
+
+    adminController.blockJob(req,res,next)
 })
 
  adminRouter.use(errorHandle); 

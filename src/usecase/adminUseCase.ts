@@ -1,13 +1,11 @@
-import User from "../entities/user";
+
 import AdminRepository from "../repository/adminRepository";
 import EncryptPassword from "../frameworks/utils/bcryptPassword";
-import IAdmin from "../entities/IAdmin";
 import JWTToken from "../frameworks/utils/generateToken";
-import { stringify } from "querystring";
+
 
 import { AdminData } from "./interfaces/admin/IAdminData";
-import { ICategory } from "../entities/iCategory";
-import { ObjectId } from "mongoose";
+import { Request } from "express";
 
 
 
@@ -119,27 +117,21 @@ class AdminUseCase{
       }
      }
      async addCategory(name:string){
-         try {
-      
-           const newcategory= await this._adminRepository.saveCategory(name);
-            
+         try {    
+           const newcategory= await this._adminRepository.saveCategory(name);         
            if(newcategory){
-
-            const allCategoryData= await this._adminRepository.getCategory();
-         
-            if(allCategoryData){
+            const allCategoryData= await this._adminRepository.getCategory();  
+        if(allCategoryData){
               return {
                 status: 200,
                 data: allCategoryData  
               };
     
             }
-
             return{
               status: 400,
               message: "An error occurred",
-            }
-              
+            } 
            };
            return {
             status: 400,
@@ -153,17 +145,11 @@ class AdminUseCase{
           };
          }
      }
-  
-
      async allCategory(){
       try {
       
         const allCategoryData:any= await this._adminRepository.getCategory();
-
-      
-        // console.log(234,allCategoryData); 
-        
-         
+ 
         if(allCategoryData){
           return {
             status: 200,
@@ -221,6 +207,89 @@ class AdminUseCase{
         };
       }
 
+     }
+     async editCatagory(req:Request){
+      try {
+       
+        const update=await this._adminRepository.editCategory(req.body.id,req.body.newCategory);
+        if (update) {
+          return {
+            status: 200,
+            message: "Successfully updated.",
+          };
+        }
+        
+        return {
+          status: 400,
+          message: "Update failed.",
+        };
+        
+      } catch (error) {
+        return {
+          status: 404,
+          message: "An error occurred",
+        };
+      }
+     }
+     async deleteCategory(id:any){
+        try {
+          const res=await this._adminRepository.deteteCategory(id);
+          if (res) {
+            return {
+              status: 200,
+              message: "Successfully deteted.",
+            };
+          }
+          return {
+            status: 400,
+            message: "Deletion failed.",
+          };
+        } catch (error) {
+          return {
+            status: 404,
+            message: "An error occurred",
+          };
+        }
+     }
+     async takeAllJob(){
+      try {
+        const allData=await this._adminRepository.findJobs();
+        if(allData){
+          return {
+            status: 200,
+            data: allData,
+          };
+        }
+        return {
+          status: 400,
+          message: "data not found",
+        };
+      } catch (error) {
+        return {
+          status: 404,
+          message: "An error occurred",
+        };
+      }
+     }
+     async blockJob(id:any){
+      try {
+        const response=await this._adminRepository.blockJob(id);
+        if (response) {
+          return {
+            status: 200,
+            message: "Job successfully blocked.",
+          };
+        }
+        return {
+          status: 400,
+          message: "Failed to block the job. Please try again.",
+        };
+      } catch (error) {
+        return {
+          status: 404,
+          message: "An error occurred",
+        };
+      }
      }
 
 }

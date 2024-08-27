@@ -150,10 +150,20 @@ class UserRepository implements UserRepo {
     return userData ? (userData.toObject() as User) : null;
   }
 
-//   async updateUser(user: User): Promise<User | null> {
-//     const updatedUser = await UserModel.findByIdAndUpdate(user.id, user, { new: true });
-//     return updatedUser ? (updatedUser.toObject() as User) : null;
-//   }
+  async checkUserBlock(id:string){
+    let User=await UserModel.findById(id)
+    return User?.isBlocked;
+    
+  }
+  async FindbyIdforAccessToken(id:string){
+     const User=await UserModel.findById({_id:id},{_id:1,user_role:1})
+     if(User){
+      return User
+     }else{
+      return false
+     }
+     
+  }
 }
 
 export default UserRepository;

@@ -70,8 +70,18 @@ class UserController {
         const createToken = await this._userUsecase.createToken(User);
 
 
-          res.cookie('refreshToken', createToken.refreshToken, { httpOnly: true });
-          res.cookie('accessToken', createToken.accessToken, { httpOnly: true });
+          res.cookie('refreshToken', createToken.refreshToken,  { 
+            httpOnly: true, 
+            maxAge: 10 * 24 * 60 * 60 * 1000, 
+            secure: true,
+            sameSite: 'strict', 
+          });
+          res.cookie('accessToken', createToken.accessToken, { 
+            httpOnly: true, 
+            maxAge: 1 * 60 * 60 * 1000,  
+            secure: true,
+            sameSite: 'strict', 
+          });
           return res.status(200).json(User);
 
       }
@@ -137,9 +147,19 @@ class UserController {
         
          const { refreshToken, accessToken } = createToken;
 
-         res.cookie('refreshToken', refreshToken, {  httpOnly: true });
+         res.cookie('refreshToken', refreshToken, { 
+          httpOnly: true, 
+          maxAge: 10 * 24 * 60 * 60 * 1000, 
+          secure: true,
+          sameSite: 'strict', 
+        });
 
-         res.cookie('accessToken', accessToken, {  httpOnly: true });
+         res.cookie('accessToken', accessToken, { 
+          httpOnly: true, 
+          maxAge: 1 * 60 * 60 * 1000,  
+          secure: true,
+          sameSite: 'strict', 
+        });
         //  console.log(978654,createToken);
          return res.status(200).json(UserData);
 
@@ -232,9 +252,19 @@ class UserController {
         
          const { refreshToken, accessToken } = createToken;
 
-         res.cookie('refreshToken', refreshToken, {  httpOnly: true });
+         res.cookie('refreshToken', refreshToken, { 
+          httpOnly: true, 
+          maxAge: 10 * 24 * 60 * 60 * 1000, 
+          secure: true,
+          sameSite: 'strict', 
+        });
 
-         res.cookie('accessToken', accessToken, {  httpOnly: true });
+         res.cookie('accessToken', accessToken, { 
+          httpOnly: true, 
+          maxAge: 1 * 60 * 60 * 1000,  
+          secure: true,
+          sameSite: 'strict', 
+        });
         
          return res.status(200).json(UserData);
 

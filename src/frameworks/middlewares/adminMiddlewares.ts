@@ -19,7 +19,7 @@ interface CustomResponse extends Response {
 const adminRepository = new AdminRepository();
 const jwtToken = new JWTToken();
 
-async function createAccessToken(decoded: JwtPayload, res: CustomResponse, next: NextFunction) {
+async function createAccessToken(decoded: JwtPayload,req:CustomRequest, res: CustomResponse, next: NextFunction) {
     if (decoded) {
         const admin: AdminData | null = await adminRepository.findAdminbyId(decoded._id as string);
 
@@ -33,7 +33,7 @@ async function createAccessToken(decoded: JwtPayload, res: CustomResponse, next:
                 sameSite: 'strict',
             });
 
-            res.admin = admin._id;
+            req.admin = admin._id;
             next();
            
         } else {
@@ -76,7 +76,7 @@ const protectAdmin = async (req: CustomRequest, res: CustomResponse, next: NextF
                         if (refreshSecret) {
                             try {
                                 const decoded = jwt.verify(refreshToken, refreshSecret) as JwtPayload;
-                                await createAccessToken(decoded, res, next);
+                                await createAccessToken (decoded, req,res, next);
                                
                             } catch (error) {
                                 if (error instanceof TokenExpiredError) {
@@ -115,7 +115,7 @@ const protectAdmin = async (req: CustomRequest, res: CustomResponse, next: NextF
             if (refreshSecret) {
                 try {
                     const decoded = jwt.verify(refreshToken, refreshSecret) as JwtPayload;
-                    await createAccessToken(decoded, res, next);
+                    await createAccessToken(decoded,req,res, next);
                    
                 } catch (error) {
                     if (error instanceof TokenExpiredError) {

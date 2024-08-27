@@ -1,12 +1,24 @@
-import multer from "multer";
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+
+const uploadDir = path.join(__dirname, 'uploads');
+
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
-    // destination: function (req, file, cb) {
-    //     cb(null, './assets'); // Specify the directory to save uploaded files
-    // },
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname); // Unique file name
+        cb(null, Date.now() + '-' + file.originalname);
     }
 });
 
-export default storage
+
+export default storage  

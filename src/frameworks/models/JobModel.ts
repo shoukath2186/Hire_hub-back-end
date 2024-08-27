@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { Model, Schema,Document } from "mongoose";
 
 import { IJob } from "../../entities/IJob";
 
@@ -25,6 +25,10 @@ const JobSchema: Schema<IJob> = new Schema(
       type: String,
       required: true,
     },
+    is_blocked:{
+      type:Boolean,
+      default:false
+    },
     title: {
       type: String,
       required: true,
@@ -33,13 +37,21 @@ const JobSchema: Schema<IJob> = new Schema(
       type: String,
       required: true,
     },
+    category:{
+       type:String,
+       required:true
+    },
     skill: {
       type: [String], 
       required: true,
     },
-    logo: {
-      type: String,
-      required: true, 
+    education:{
+      type:String,
+      required:true
+    },
+    description:{
+      type:String,
+      require:true
     },
     applications: {
       type: [String], 
@@ -47,11 +59,12 @@ const JobSchema: Schema<IJob> = new Schema(
     },
   },
   {
-    timestamps: true, 
+    timestamps: true,  
   }
 );
 
-
-const JobModel: Model<IJob> = mongoose.model<IJob>("Job", JobSchema);
-
-export default JobModel;
+const JobModel: Model<IJob & Document> = mongoose.model<IJob & Document>(
+   "Job", JobSchema
+  );
+  
+  export default JobModel;

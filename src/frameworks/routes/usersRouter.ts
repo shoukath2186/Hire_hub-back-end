@@ -12,7 +12,6 @@ import JWTToken from '../utils/generateToken';
 import errorHandle from "../middlewares/errorHandle";
 import StringGenerator from "../utils/stringGenerator"
 import ForgotPasswordLink from '../utils/ForgotPasswordLinkSent'
-import { log } from 'console';
 
 const userRouter = express.Router();
 

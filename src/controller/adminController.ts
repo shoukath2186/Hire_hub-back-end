@@ -161,7 +161,7 @@ class AdminController {
       try {
          const admin = req.body.data
          const data=req.query.id
-         console.log(234,data);
+        // console.log(234,data);
          
 
          if (admin == 'admin') {  
@@ -175,7 +175,42 @@ class AdminController {
          next(error)
       }
    }
-
+   async editCategory(req: Request, res: Response, next: NextFunction){
+      try {
+         const response=await this.useCase.editCatagory(req);
+         res.status(response.status).json(response.message)
+      } catch (error) {
+         next(error)
+      }
+   }
+   async degeteCategory(req: Request, res: Response, next: NextFunction){
+      try {
+         const response=await this.useCase.deleteCategory(req.query.id);
+         res.status(response.status).json(response.message)
+      } catch (error) {
+         next(error)
+      }
+   }
+   async takeAlljobs(req: Request, res: Response, next: NextFunction){
+       try {
+         const data=await this.useCase.takeAllJob();
+         if(data.status==200){
+            res.status(200).json(data.data)
+         }else{
+            res.status(data.status).json(data.message);
+         }
+       } catch (error) {
+         next(error)
+       }
+   }
+   async blockJob(req: Request, res: Response, next: NextFunction){
+      try {
+         const response=await this.useCase.blockJob(req.body.id);
+         res.status(response.status).json(response.message);
+      } catch (error) {
+         next(error)
+      }
+   }
 
 }
 
